@@ -1,18 +1,37 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class PLayNaatScreen extends StatefulWidget {
-  const PLayNaatScreen({super.key, required this.filePath});
-  final String filePath;
+class PlayNaatScreen extends StatefulWidget {
+  const PlayNaatScreen({super.key, required this.name, required this.url});
+  final String name;
+  final String url;
   @override
-  State<PLayNaatScreen> createState() => _PLayNaatScreenState();
+  State<PlayNaatScreen> createState() => _PlayNaatScreenState();
 }
 
-class _PLayNaatScreenState extends State<PLayNaatScreen> {
+class _PlayNaatScreenState extends State<PlayNaatScreen> {
+  late AudioPlayer _audioPlayer;
+  bool _isPlaying = false;
+
   @override
   void initState() {
     super.initState();
     _checkPermissions();
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.onPlayerStateChanged.listen((state) {
+      setState(() {
+        _isPlaying = state == PlayerState.playing;
+      });
+    });
+    _playMusic();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.release();
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
   Future<void> _checkPermissions() async {
@@ -35,6 +54,52 @@ class _PLayNaatScreenState extends State<PLayNaatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Music: ${widget.name}',
+            style: const TextStyle(fontSize: 20),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.play_arrow),
+                onPressed: () {
+                  _playMusic();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.pause),
+                onPressed: () {
+                  _pauseMusic();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.stop),
+                onPressed: () {
+                  _stopMusic();
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _playMusic() async {
+    await _audioPlayer.play(UrlSource(widget.url));
+  }
+
+  Future<void> _pauseMusic() async {
+    await _audioPlayer.pause();
+  }
+
+  Future<void> _stopMusic() async {
+    await _audioPlayer.stop();
   }
 }

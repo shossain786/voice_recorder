@@ -20,19 +20,22 @@ class MyNaatScreen extends StatelessWidget {
                 color: kColorScheme.onPrimaryContainer.withOpacity(.4),
                 margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                 elevation: 10,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Ya Rasool Allah(ﷺ) Tere',
-                        style: TextStyle(
-                          color: kColorScheme.onSecondary,
-                          fontSize: 20,
+                child: InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Ya Rasool Allah(ﷺ) Tere',
+                          style: TextStyle(
+                            color: kColorScheme.onSecondary,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:voice_recorder/home_screen.dart';
 import 'package:voice_recorder/screens/my_favorites.dart';
-import 'package:voice_recorder/screens/naat_lists.dart';
 import 'package:voice_recorder/screens/recordings_screen.dart';
 
-var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.red);
+import 'module/naat_collections.dart';
+
+var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.orangeAccent);
 void main() {
   runApp(const MyApp());
 }
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         '/homePage': (context) => const HomeScreen(),
         '/recordings': (context) => const RecordingsScreen(),
         '/favPage': (context) => const MyFavoritesScreen(),
-        '/naatPage': (context) => const MyNaatScreen(),
+        '/naatPage': (context) => NaatCollections(),
       },
     );
   }
