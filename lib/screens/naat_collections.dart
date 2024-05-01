@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../screens/naat_playing_screen.dart';
-import 'naat_module.dart';
+import 'naat_playing_screen.dart';
+import '../module/naat_module.dart';
 
 class NaatCollections extends StatelessWidget {
   NaatCollections({super.key});

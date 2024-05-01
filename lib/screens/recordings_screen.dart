@@ -54,26 +54,43 @@ class _RecordingsScreenState extends State<RecordingsScreen> {
         itemCount: recordings.length,
         itemBuilder: (context, index) {
           final recording = recordings[index];
-          return Card(
-            color: kColorScheme.onPrimaryContainer.withOpacity(0.7),
-            margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-            elevation: 10,
-            shadowColor: Colors.yellowAccent,
-            child: ListTile(
-              title: Text(
-                recording.substring(
-                  recording.lastIndexOf('/') + 1,
-                  recording.lastIndexOf('.'),
+          return Dismissible(
+            key: Key(recording),
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(left: 20.0),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            direction: DismissDirection.startToEnd,
+            onDismissed: (direction) {
+              setState(() {
+                recordings.removeAt(index);
+                File(recording).deleteSync();
+              });
+            },
+            child: Card(
+              color: kColorScheme.onPrimaryContainer.withOpacity(0.7),
+              margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+              elevation: 10,
+              shadowColor: Colors.yellowAccent,
+              child: ListTile(
+                title: Text(
+                  recording.substring(
+                    recording.lastIndexOf('/') + 1,
+                    recording.lastIndexOf('.'),
+                  ),
+                  style: TextStyle(
+                    color: kColorScheme.onSecondary.withOpacity(0.7),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                style:
-                    TextStyle(color: kColorScheme.onSecondary.withOpacity(0.7)),
-                overflow: TextOverflow.ellipsis,
+                onTap: () {
+                  debugPrint('File playing: $recording');
+                  AudioPlayer player = AudioPlayer();
+                  player.play(DeviceFileSource(recording));
+                },
               ),
-              onTap: () {
-                debugPrint('File playing: $recording');
-                AudioPlayer player = AudioPlayer();
-                player.play(DeviceFileSource(recording));
-              },
             ),
           );
         },

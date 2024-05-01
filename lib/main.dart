@@ -3,9 +3,10 @@ import 'package:voice_recorder/home_screen.dart';
 import 'package:voice_recorder/screens/my_favorites.dart';
 import 'package:voice_recorder/screens/recordings_screen.dart';
 
-import 'module/naat_collections.dart';
+import 'screens/naat_collections.dart';
 
-var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.orangeAccent);
+var kColorScheme =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(205, 164, 241, 160));
 void main() {
   runApp(const MyApp());
 }
