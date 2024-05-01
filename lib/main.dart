@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:voice_recorder/home_screen.dart';
-import 'package:voice_recorder/widgets/screens/my_favorites.dart';
-import 'package:voice_recorder/widgets/screens/naat_lists.dart';
+import 'package:voice_recorder/screens/my_favorites.dart';
+import 'package:voice_recorder/screens/naat_lists.dart';
+import 'package:voice_recorder/screens/recordings_screen.dart';
 
 var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.red);
 void main() {
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(),
       routes: {
         '/homePage': (context) => const HomeScreen(),
+        '/recordings': (context) => const RecordingsScreen(),
         '/favPage': (context) => const MyFavoritesScreen(),
         '/naatPage': (context) => const MyNaatScreen(),
       },

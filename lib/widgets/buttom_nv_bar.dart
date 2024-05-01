@@ -27,13 +27,21 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
           label: 'Home',
           backgroundColor: kColorScheme.onPrimaryContainer,
         ),
+        BottomNavigationBarItem(
+          icon: const Icon(
+            Icons.lyrics_outlined,
+          ),
+          label: 'Recordings',
+          backgroundColor: kColorScheme.onPrimaryContainer,
+        ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.favorite),
           label: 'Favorites',
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.star),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.star),
           label: 'Online Naat',
+          backgroundColor: kColorScheme.onPrimaryContainer,
         ),
       ],
     );
@@ -48,9 +56,12 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
         Navigator.pushNamed(context, '/homePage');
         break;
       case 1:
-        Navigator.pushNamed(context, '/favPage');
+        Navigator.pushNamed(context, '/recordings');
         break;
       case 2:
+        Navigator.pushNamed(context, '/favPage');
+        break;
+      case 3:
         Navigator.pushNamed(context, '/naatPage');
         break;
     }

@@ -5,9 +5,7 @@ import 'package:file/local.dart';
 import 'package:another_audio_recorder/another_audio_recorder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:voice_recorder/main.dart';
 
-import 'recordings_screen.dart';
 import 'widgets/buttom_nv_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -123,61 +121,7 @@ class RecorderExampleState extends State<RecorderExample> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RecordingsScreen(),
-                      )),
-                  child: const Text('Recordings'),
-                ),
               ],
-            ),
-            Card(
-              color: kColorScheme.onPrimaryContainer.withOpacity(.4),
-              margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              elevation: 10,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Ya Rasool Allah(ﷺ) Tere',
-                      style: TextStyle(
-                        color: kColorScheme.onSecondary,
-                        fontSize: 20,
-                      ),
-                    ),
-                    buttonPressed
-                        ? ElevatedButton(
-                            onPressed: () {
-                              setState(
-                                () {
-                                  naatPlayer.stop();
-                                  buttonPressed = !buttonPressed;
-                                },
-                              );
-                            },
-                            child: const Text('Stop'),
-                          )
-                        : ElevatedButton(
-                            onPressed: () {
-                              setState(
-                                () {
-                                  naatPlayer.play(
-                                    UrlSource(
-                                        'https://humariweb.com/naats/ARQ/Ya-Rasool-Allah-(S.A.W)-Tere-(Hamariweb.com).mp3'),
-                                  );
-                                  buttonPressed = !buttonPressed;
-                                },
-                              );
-                            },
-                            child: const Text('Play Naat'),
-                          ),
-                  ],
-                ),
-              ),
             ),
             Text("File path of the record: ${_current?.path}"),
           ],
