@@ -5,8 +5,7 @@ import 'package:voice_recorder/screens/recordings_screen.dart';
 
 import 'screens/naat_collections.dart';
 
-var kColorScheme =
-    ColorScheme.fromSeed(seedColor: const Color.fromARGB(205, 164, 241, 160));
+var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.grey);
 void main() {
   runApp(const MyApp());
 }
@@ -20,17 +19,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Voice Recorder',
       themeMode: ThemeMode.dark,
+      color: kColorScheme.onSecondaryContainer,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           color: kColorScheme.onPrimaryContainer,
           foregroundColor: kColorScheme.onSecondary,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) => kColorScheme.primaryContainer,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) => kColorScheme.primaryContainer,
+            ),
           ),
-        )),
+        ),
         buttonTheme: ButtonThemeData(
           buttonColor: kColorScheme.onSecondaryContainer,
           focusColor: kColorScheme.onSecondaryContainer,
