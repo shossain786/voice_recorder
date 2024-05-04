@@ -69,24 +69,39 @@ class _RecordingsScreenState extends State<RecordingsScreen> {
                 File(recording).deleteSync();
               });
             },
-            child: Card(
-              margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-              child: ListTile(
-                title: Text(
-                  recording.substring(
-                    recording.lastIndexOf('/') + 1,
-                    recording.lastIndexOf('.'),
-                  ),
-                  style: TextStyle(
-                    color: kColorScheme.onSecondary,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+            child: Container(
+              margin: const EdgeInsets.all(2),
+              padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                gradient: const LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.red,
+                    Colors.yellow,
+                  ],
                 ),
-                onTap: () {
-                  debugPrint('File playing: $recording');
-                  AudioPlayer player = AudioPlayer();
-                  player.play(DeviceFileSource(recording));
-                },
+              ),
+              child: Card(
+                margin: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+                child: ListTile(
+                  title: Text(
+                    recording.substring(
+                      recording.lastIndexOf('/') + 1,
+                      recording.lastIndexOf('.'),
+                    ),
+                    style: TextStyle(
+                      color: kColorScheme.onSecondary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: () {
+                    debugPrint('File playing: $recording');
+                    AudioPlayer player = AudioPlayer();
+                    player.play(DeviceFileSource(recording));
+                  },
+                ),
               ),
             ),
           );
