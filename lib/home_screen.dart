@@ -47,6 +47,7 @@ class RecorderExampleState extends State<RecorderExample> {
   RecordingStatus _currentStatus = RecordingStatus.Unset;
   AudioPlayer naatPlayer = AudioPlayer();
   bool buttonPressed = false;
+  bool _isRecording = false;
 
   @override
   void initState() {
@@ -97,18 +98,27 @@ class RecorderExampleState extends State<RecorderExample> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
-                    child: _buildText(_currentStatus),
+                    child: _buildText(
+                      _currentStatus,
+                    ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed:
-                      _currentStatus != RecordingStatus.Unset ? _stop : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                  ),
-                  child: const Text(
-                    "Stop",
-                    style: TextStyle(color: Colors.white),
+                Visibility(
+                  visible: _isRecording,
+                  child: ElevatedButton(
+                    onPressed:
+                        _currentStatus != RecordingStatus.Unset ? _stop : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                    ),
+                    child: const Text(
+                      "Stop",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        letterSpacing: 1.3,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -119,7 +129,11 @@ class RecorderExampleState extends State<RecorderExample> {
                   ),
                   child: const Text(
                     "Play",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      letterSpacing: 1.3,
+                    ),
                   ),
                 ),
               ],
@@ -164,6 +178,7 @@ class RecorderExampleState extends State<RecorderExample> {
       var recording = await _recorder?.current(channel: 0);
       setState(() {
         _current = recording;
+        _isRecording = true;
       });
 
       const tick = Duration(milliseconds: 50);
@@ -171,9 +186,7 @@ class RecorderExampleState extends State<RecorderExample> {
         if (_currentStatus == RecordingStatus.Stopped) {
           t.cancel();
         }
-
         var current = await _recorder?.current(channel: 0);
-        // print(current.status);
         setState(() {
           _current = current;
           _currentStatus = _current!.status!;
@@ -200,6 +213,7 @@ class RecorderExampleState extends State<RecorderExample> {
       () {
         _current = result;
         _currentStatus = _current!.status!;
+        _isRecording = false;
       },
     );
   }
@@ -230,7 +244,14 @@ class RecorderExampleState extends State<RecorderExample> {
       default:
         break;
     }
-    return Text(text, style: const TextStyle(color: Colors.white));
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        letterSpacing: 1.3,
+      ),
+    );
   }
 
   void onPlayAudio() async {

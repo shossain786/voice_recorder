@@ -5,7 +5,7 @@ import 'package:voice_recorder/screens/recordings_screen.dart';
 
 import 'screens/naat_collections.dart';
 
-var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.grey);
+var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.green);
 void main() {
   runApp(const MyApp());
 }
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       color: kColorScheme.onSecondaryContainer,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
-          color: kColorScheme.onPrimaryContainer,
+          color: kColorScheme.onPrimaryContainer.withOpacity(0.9),
           foregroundColor: kColorScheme.onSecondary,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -49,6 +49,13 @@ class MyApp extends StatelessWidget {
         ),
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: kColorScheme.onPrimaryContainer,
+        ),
+        cardTheme: CardTheme(
+          color: kColorScheme.onPrimaryContainer,
+          elevation: 10,
+          shadowColor: Colors.yellowAccent,
+          margin: const EdgeInsets.all(4),
+          surfaceTintColor: Colors.blue,
         ),
       ),
       home: const HomeScreen(),

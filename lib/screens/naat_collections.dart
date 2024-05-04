@@ -74,37 +74,40 @@ class NaatCollections extends StatelessWidget {
         itemCount: naatCollections.length,
         itemBuilder: (context, index) {
           return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 10,
-            shadowColor: kColorScheme.onPrimaryContainer,
             child: Padding(
               padding: const EdgeInsets.all(2),
               child: ListTile(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                contentPadding: const EdgeInsets.all(4),
+                contentPadding: const EdgeInsets.only(
+                    left: 10, top: 4, bottom: 4, right: 10),
                 dense: true,
-                tileColor: kColorScheme.onSecondaryContainer.withOpacity(0.3),
                 leading: const CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.transparent,
-                  child: Image(
-                    image: AssetImage('assets/images/madina.png'),
-                    fit: BoxFit.fitHeight,
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: AssetImage('assets/images/madina.png'),
                   ),
                 ),
                 title: Text(
                   naatCollections[index].name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: kColorScheme.onSecondary,
+                  ),
                 ),
                 subtitle: Text(
                   naatCollections[index].naatKhawan,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: kColorScheme.onSecondary,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(

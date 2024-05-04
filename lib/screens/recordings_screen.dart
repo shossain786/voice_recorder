@@ -70,10 +70,7 @@ class _RecordingsScreenState extends State<RecordingsScreen> {
               });
             },
             child: Card(
-              color: kColorScheme.onPrimaryContainer.withOpacity(0.7),
               margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-              elevation: 10,
-              shadowColor: Colors.yellowAccent,
               child: ListTile(
                 title: Text(
                   recording.substring(
@@ -81,7 +78,7 @@ class _RecordingsScreenState extends State<RecordingsScreen> {
                     recording.lastIndexOf('.'),
                   ),
                   style: TextStyle(
-                    color: kColorScheme.onSecondary.withOpacity(0.7),
+                    color: kColorScheme.onSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
