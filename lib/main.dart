@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: kColorScheme.onSecondary,
           centerTitle: true,
         ),
-        scaffoldBackgroundColor: kColorScheme.background,
+        scaffoldBackgroundColor: kColorScheme.background.withOpacity(0.4),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: kColorScheme.onPrimaryContainer,
         ),
         cardTheme: CardTheme(
-          color: kColorScheme.onPrimaryContainer.withOpacity(0.6),
+          color: kColorScheme.onSecondaryContainer.withOpacity(0.6),
           elevation: 10,
           shadowColor: Colors.yellowAccent,
           margin: const EdgeInsets.all(4),

@@ -73,53 +73,70 @@ class NaatCollections extends StatelessWidget {
       body: ListView.builder(
         itemCount: naatCollections.length,
         itemBuilder: (context, index) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(2),
-              child: ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+          return Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Container(
+              margin: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                gradient: const LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.red,
+                    Colors.yellow,
+                  ],
                 ),
-                contentPadding: const EdgeInsets.only(
-                    left: 10, top: 4, bottom: 4, right: 10),
-                dense: true,
-                leading: const CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.transparent,
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: AssetImage('assets/images/madina.png'),
-                  ),
-                ),
-                title: Text(
-                  naatCollections[index].name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: kColorScheme.onSecondary,
-                  ),
-                ),
-                subtitle: Text(
-                  naatCollections[index].naatKhawan,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: kColorScheme.onSecondary,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayNaatScreen(
-                        name: naatCollections[index].name,
-                        url: naatCollections[index].url,
+              ),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.only(
+                        left: 10, top: 4, bottom: 4, right: 10),
+                    dense: true,
+                    leading: const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.transparent,
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage('assets/images/madina.png'),
                       ),
                     ),
-                  );
-                },
+                    title: Text(
+                      naatCollections[index].name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: kColorScheme.onSecondary,
+                      ),
+                    ),
+                    subtitle: Text(
+                      naatCollections[index].naatKhawan,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: kColorScheme.onSecondary,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlayNaatScreen(
+                            name: naatCollections[index].name,
+                            url: naatCollections[index].url,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
           );
