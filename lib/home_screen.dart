@@ -3,9 +3,9 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:file/local.dart';
 import 'package:another_audio_recorder/another_audio_recorder.dart';
+import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:intl/intl.dart';
 
 import 'widgets/buttom_nv_bar.dart';
 
@@ -61,7 +61,7 @@ class RecorderExampleState extends State<RecorderExample> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -98,9 +98,7 @@ class RecorderExampleState extends State<RecorderExample> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
-                    child: _buildText(
-                      _currentStatus,
-                    ),
+                    child: _buildText(_currentStatus),
                   ),
                 ),
                 Visibility(
@@ -109,30 +107,15 @@ class RecorderExampleState extends State<RecorderExample> {
                     onPressed:
                         _currentStatus != RecordingStatus.Unset ? _stop : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.red,
                     ),
                     child: const Text(
                       "Stop",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                         letterSpacing: 1.3,
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: onPlayAudio,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text(
-                    "Play",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      letterSpacing: 1.3,
                     ),
                   ),
                 ),
@@ -145,14 +128,14 @@ class RecorderExampleState extends State<RecorderExample> {
   }
 
   _init() async {
-    String formattedDateTime =
-        DateFormat('dd-MM-yyyyTHH:mm:ss').format(DateTime.now());
     try {
       if (await AnotherAudioRecorder.hasPermissions) {
-        String customPath = '/MyRecording_$formattedDateTime';
+        String customPath = '/another_audio_recorder_';
         io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
 
-        customPath = appDocDirectory.path + customPath;
+        customPath = appDocDirectory.path +
+            customPath +
+            DateTime.now().millisecondsSinceEpoch.toString();
         _recorder =
             AnotherAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
@@ -186,7 +169,9 @@ class RecorderExampleState extends State<RecorderExample> {
         if (_currentStatus == RecordingStatus.Stopped) {
           t.cancel();
         }
+
         var current = await _recorder?.current(channel: 0);
+        // print(current.status);
         setState(() {
           _current = current;
           _currentStatus = _current!.status!;
@@ -209,13 +194,20 @@ class RecorderExampleState extends State<RecorderExample> {
 
   _stop() async {
     var result = await _recorder?.stop();
-    setState(
-      () {
-        _current = result;
-        _currentStatus = _current!.status!;
-        _isRecording = false;
-      },
-    );
+    debugPrint("Stop recording: ${result?.path}");
+    debugPrint("Stop recording: ${result?.duration}");
+    io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    String destinationPath =
+        '${appDocDirectory.path}/Recording_${DateTime.now().millisecondsSinceEpoch.toString()}.wav';
+    await io.File(result!.path!).copy(destinationPath);
+
+    debugPrint("File saved to: $destinationPath");
+
+    setState(() {
+      _current = result;
+      _isRecording = false;
+      _currentStatus = _current!.status!;
+    });
   }
 
   Widget _buildText(RecordingStatus status) {
@@ -238,7 +230,7 @@ class RecorderExampleState extends State<RecorderExample> {
         }
       case RecordingStatus.Stopped:
         {
-          text = 'Initialize';
+          text = 'Init';
           break;
         }
       default:
@@ -248,7 +240,7 @@ class RecorderExampleState extends State<RecorderExample> {
       text,
       style: const TextStyle(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 18,
         letterSpacing: 1.3,
       ),
     );
