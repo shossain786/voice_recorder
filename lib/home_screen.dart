@@ -3,7 +3,7 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:file/local.dart';
 import 'package:another_audio_recorder/another_audio_recorder.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -130,12 +130,12 @@ class RecorderExampleState extends State<RecorderExample> {
   _init() async {
     try {
       if (await AnotherAudioRecorder.hasPermissions) {
-        String customPath = '/another_audio_recorder_';
+        String dateTime =
+            DateFormat('dd-MM-yyyy_HH:mm:ss').format(DateTime.now());
+        String customPath = '/voice_record_';
         io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
 
-        customPath = appDocDirectory.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
+        customPath = appDocDirectory.path + customPath + dateTime;
         _recorder =
             AnotherAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
@@ -194,15 +194,6 @@ class RecorderExampleState extends State<RecorderExample> {
 
   _stop() async {
     var result = await _recorder?.stop();
-    debugPrint("Stop recording: ${result?.path}");
-    debugPrint("Stop recording: ${result?.duration}");
-    io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
-    String destinationPath =
-        '${appDocDirectory.path}/Recording_${DateTime.now().millisecondsSinceEpoch.toString()}.wav';
-    await io.File(result!.path!).copy(destinationPath);
-
-    debugPrint("File saved to: $destinationPath");
-
     setState(() {
       _current = result;
       _isRecording = false;
