@@ -3,7 +3,7 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:file/local.dart';
 import 'package:another_audio_recorder/another_audio_recorder.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -130,7 +130,10 @@ class RecorderExampleState extends State<RecorderExample> {
   _init() async {
     try {
       if (await AnotherAudioRecorder.hasPermissions) {
-        String customPath = '/another_audio_recorder_';
+        String currentTime =
+            DateFormat('dd_MM_yyyy_HH_mm_ss').format(DateTime.now());
+        debugPrint(currentTime);
+        String customPath = '/voice_recording_$currentTime';
         io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
 
         customPath = appDocDirectory.path +
