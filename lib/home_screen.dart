@@ -136,9 +136,7 @@ class RecorderExampleState extends State<RecorderExample> {
         String customPath = '/voice_recording_$currentTime';
         io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
 
-        customPath = appDocDirectory.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
+        customPath = appDocDirectory.path + customPath;
         _recorder =
             AnotherAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
