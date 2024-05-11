@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:voice_recorder/home_screen.dart';
+import 'package:voice_recorder/screens/bayans.dart';
 import 'package:voice_recorder/screens/my_favorites.dart';
 import 'package:voice_recorder/screens/recordings_screen.dart';
+import 'package:voice_recorder/screens/youtube_naat.dart';
 
 import 'screens/naat_collections.dart';
 
-var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.green);
+var kColorScheme =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 64, 245, 23));
 void main() {
   runApp(const MyApp());
 }
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: kColorScheme.onSecondary,
           centerTitle: true,
         ),
-        scaffoldBackgroundColor: kColorScheme.background.withOpacity(0.4),
+        scaffoldBackgroundColor: kColorScheme.onSecondary,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -66,6 +69,8 @@ class MyApp extends StatelessWidget {
         '/recordings': (context) => const RecordingsScreen(),
         '/favPage': (context) => const MyFavoritesScreen(),
         '/naatPage': (context) => NaatCollections(),
+        '/bayan': (context) => const BayansScreen(),
+        '/youtube': (context) => const YouTubeNaat(),
       },
     );
   }

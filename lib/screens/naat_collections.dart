@@ -15,21 +15,33 @@ class NaatCollections extends StatelessWidget {
           'https://humariweb.com/naats/ARQ/Ya-Rasool-Allah-(S.A.W)-Tere-(Hamariweb.com).mp3',
     ),
     NaatModule(
+      name: 'Maslake Ala Hazrat Salamat Rahe',
+      naatKhawan: 'Sayyed Abdul Wasi',
+      url:
+          'https://www.thesunniway.com/jdownloads/Naat/Sayyid%20Abdul%20Wasi%20Barkati/Maslak%20e%20Ala%20Hazrat%20Salamat%20Rahe.mp3',
+    ),
+    NaatModule(
       name: 'Aaj Aye Nabioke Sardaar Mrhaba',
       naatKhawan: 'Owais Raza Qadri',
       url: 'https://owaisqadri.com/naats/aaj_aaye_nabiyon_ke_sardar.mp3',
     ),
     NaatModule(
-      name: 'Nabi Nabi(ﷺ)',
-      naatKhawan: 'Owais Raza Qadri',
+      name: 'Balagal Ula Bekamalehi',
+      naatKhawan: 'Syed Rehan Qadri',
       url:
-          'https://www.thesunniway.com/jdownloads/Naat/Asad%20Iqbal/01_nabi_nabi.mp3',
+          'https://www.alahazrat.info/naats/rqadri/mp3/balagalula_bekamalehi.mp3',
     ),
     NaatModule(
-      name: 'Subho Taiba me hui',
-      naatKhawan: 'Owais Raza Qadri',
+      name: 'Ae Sabz Gumbad Wale Manzoor Dua Karna',
+      naatKhawan: 'Shahbaz Qamar Fareedi',
       url:
-          'https://owaisqadri.com/mehfils/21-10-17/Subha%20Taiba%20Mein%20Hui.mp3',
+          'https://humariweb.com/naats/sqf/Ae_Sabz_Gumbad_Wale_Manzoor_Dua_Karna-(HamariWeb.com).mp3',
+    ),
+    NaatModule(
+      name: 'Nabi Nabi(ﷺ)',
+      naatKhawan: 'Asad Iqbal',
+      url:
+          'https://www.thesunniway.com/jdownloads/Naat/Asad%20Iqbal/01_nabi_nabi.mp3',
     ),
     NaatModule(
       name: 'Mustafa(ﷺ) Jaan-e-Rahmat Pe Lakhoon Salam',
@@ -41,16 +53,6 @@ class NaatCollections extends StatelessWidget {
       name: 'Noor Wala Aya Hai',
       naatKhawan: 'Owais Raza Qadri',
       url: 'https://owaisqadri.com/naats/Noor%20Wala%20Aaya%20Hai%202013.mp3',
-    ),
-    NaatModule(
-      name: 'Allah Allah Hoo Allah Hoo',
-      naatKhawan: 'Owais Raza Qadri',
-      url: 'https://owaisqadri.com/naats/Allah%20Allah%20Hoo%20Allah%20Hoo.mp3',
-    ),
-    NaatModule(
-      name: 'Teri Choukhat Pe Mangta Tera As Gaya',
-      naatKhawan: 'Owais Raza Qadri',
-      url: 'https://owaisqadri.com/naats/Teri-Chokhat-Pe-Mangta.mp3',
     ),
     NaatModule(
       name: 'Qaseedah Burdah Shareef',
