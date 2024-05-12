@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -20,6 +22,8 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
   late Timer _timer;
+  String get _positionText => _position.toString().split('.').first;
+  String get _durationText => _duration.toString().split('.').first;
 
   @override
   void initState() {
@@ -131,6 +135,17 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
                         _position.inMilliseconds < _duration.inMilliseconds)
                     ? _position.inMilliseconds / _duration.inMilliseconds
                     : 0.0,
+              ),
+              Text(
+                _position != null
+                    ? '$_positionText / $_durationText'
+                    : _duration != null
+                        ? _durationText
+                        : '',
+                style: const TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.purple,
+                ),
               ),
               const SizedBox(height: 20),
               Container(
