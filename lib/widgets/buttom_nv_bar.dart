@@ -35,7 +35,7 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
           backgroundColor: kColorScheme.onPrimaryContainer,
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.favorite),
+          icon: Icon(Icons.video_library),
           label: 'Youtube Naat',
         ),
         BottomNavigationBarItem(
@@ -44,7 +44,7 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
           backgroundColor: kColorScheme.onPrimaryContainer,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.star),
+          icon: const Icon(Icons.my_library_music),
           label: 'Online Naat',
           backgroundColor: kColorScheme.onPrimaryContainer,
         ),

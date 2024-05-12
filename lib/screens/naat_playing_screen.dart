@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,6 +17,7 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
   bool _isPlaying = false;
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -32,10 +34,14 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
         _duration = duration;
       });
     });
-    _audioPlayer.onPositionChanged.listen((Duration position) {
-      setState(() {
-        _position = position;
-      });
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (_isPlaying) {
+        _audioPlayer.getCurrentPosition().then((duration) {
+          setState(() {
+            _position = duration ?? Duration.zero;
+          });
+        });
+      }
     });
     _playNaat();
   }
@@ -44,6 +50,7 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
   void dispose() {
     _audioPlayer.release();
     _audioPlayer.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -73,10 +80,10 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/play2.gif'),
-            fit: BoxFit.cover,
-            opacity: 0.4,
+          gradient: LinearGradient(
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+            colors: [Colors.white24, Colors.white54],
           ),
         ),
         child: Padding(
@@ -91,11 +98,30 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
                 filterQuality: FilterQuality.high,
               ),
               const SizedBox(height: 20),
+              Slider(
+                thumbColor: Colors.red,
+                inactiveColor: Colors.blue,
+                activeColor: Colors.purple,
+                onChanged: (value) {
+                  final duration = _duration;
+                  final position = value * duration.inMilliseconds;
+                  _audioPlayer.seek(Duration(milliseconds: position.round()));
+                },
+                value: (_position.inMilliseconds > 0 &&
+                        _position.inMilliseconds < _duration.inMilliseconds)
+                    ? _position.inMilliseconds / _duration.inMilliseconds
+                    : 0.0,
+              ),
+              const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black.withOpacity(0.4),
-                ),
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(colors: [
+                      Colors.purple,
+                      Colors.red,
+                      Colors.pink,
+                      Colors.yellowAccent,
+                    ])),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -105,32 +131,26 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
                             onPressed: () {
                               _pauseNaat();
                             },
+                            color: Colors.white,
                           )
                         : IconButton(
                             icon: const Icon(Icons.play_arrow),
                             onPressed: () {
                               _playNaat();
                             },
+                            color: Colors.white,
                           ),
                     IconButton(
                       icon: const Icon(Icons.stop),
                       onPressed: () {
                         _stopNaat();
                       },
+                      color: Colors.white,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 10),
-              LinearProgressIndicator(
-                value: _duration.inMilliseconds > 0
-                    ? (_position.inMilliseconds / _duration.inMilliseconds)
-                        .clamp(0.0, 1.0)
-                    : 0.0,
-                minHeight: 10,
-                backgroundColor: Colors.grey,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-              ),
             ],
           ),
         ),
@@ -144,8 +164,8 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
 
   Future<void> _pauseNaat() async {
     if (_audioPlayer.state == PlayerState.playing) {
-    await _audioPlayer.pause();
-  }
+      await _audioPlayer.pause();
+    }
   }
 
   Future<void> _stopNaat() async {

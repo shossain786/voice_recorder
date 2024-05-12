@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         '/homePage': (context) => const HomeScreen(),
         '/recordings': (context) => const RecordingsScreen(),
         '/naatPage': (context) => NaatCollections(),
-        '/bayan': (context) => const BayansScreen(),
+        '/bayan': (context) => BayansScreen(),
         '/youtube': (context) => const VideoList(),
       },
     );
