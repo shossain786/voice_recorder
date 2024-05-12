@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:voice_recorder/home_screen.dart';
 import 'package:voice_recorder/screens/bayans.dart';
-import 'package:voice_recorder/screens/my_favorites.dart';
 import 'package:voice_recorder/screens/recordings_screen.dart';
-import 'package:voice_recorder/screens/youtube_naat.dart';
 
+import 'screens/youtube_videos.dart';
 import 'screens/naat_collections.dart';
 
-var kColorScheme =
-    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 64, 245, 23));
+var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
 void main() {
   runApp(const MyApp());
 }
@@ -67,10 +65,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/homePage': (context) => const HomeScreen(),
         '/recordings': (context) => const RecordingsScreen(),
-        '/favPage': (context) => const MyFavoritesScreen(),
         '/naatPage': (context) => NaatCollections(),
         '/bayan': (context) => const BayansScreen(),
-        '/youtube': (context) => const YouTubeNaat(),
+        '/youtube': (context) => const VideoList(),
       },
     );
   }

@@ -25,14 +25,14 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
             Icons.home,
           ),
           label: 'Home',
-          backgroundColor: kColorScheme.secondary,
+          backgroundColor: kColorScheme.onPrimaryContainer,
         ),
         BottomNavigationBarItem(
           icon: const Icon(
             Icons.lyrics_outlined,
           ),
           label: 'Recordings',
-          backgroundColor: kColorScheme.secondaryContainer,
+          backgroundColor: kColorScheme.onPrimaryContainer,
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.favorite),

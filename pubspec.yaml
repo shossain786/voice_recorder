@@ -41,6 +41,7 @@ dependencies:
   audioplayers: ^6.0.0
   permission_handler: ^11.3.1
   intl: ^0.19.0
+  youtube_player_flutter: ^9.0.1
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +68,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/madina.png
-  #   - images/a_dot_ham.jpeg
+    - assets/images/play.gif
+    - assets/images/play1.gif
+    - assets/images/play2.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
