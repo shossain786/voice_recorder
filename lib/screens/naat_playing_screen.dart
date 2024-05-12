@@ -96,16 +96,16 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
               Text(
                 'Title: ${widget.name}',
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                   color: Color.fromARGB(255, 32, 15, 81),
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                'Voice: ${widget..voice}',
+                'Voice: ${widget.voice}',
                 style: const TextStyle(
-                  fontSize: 10,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Color.fromARGB(255, 228, 15, 89),
                 ),
