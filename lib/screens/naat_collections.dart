@@ -133,6 +133,7 @@ class NaatCollections extends StatelessWidget {
                           builder: (context) => PlayNaatScreen(
                             name: naatCollections[index].name,
                             url: naatCollections[index].url,
+                            voice: naatCollections[index].naatKhawan,
                           ),
                         ),
                       );

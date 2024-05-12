@@ -4,9 +4,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PlayNaatScreen extends StatefulWidget {
-  const PlayNaatScreen({super.key, required this.name, required this.url});
+  const PlayNaatScreen(
+      {super.key, required this.name, required this.url, required this.voice});
   final String name;
   final String url;
+  final String voice;
 
   @override
   State<PlayNaatScreen> createState() => _PlayNaatScreenState();
@@ -91,6 +93,24 @@ class _PlayNaatScreenState extends State<PlayNaatScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'Title: ${widget.name}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 32, 15, 81),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                'Voice: ${widget..voice}',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 228, 15, 89),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
               const SizedBox(height: 20),
               Image.asset(
                 'assets/images/play.gif',

@@ -146,6 +146,7 @@ class BayansScreen extends StatelessWidget {
                           builder: (context) => PlayNaatScreen(
                             name: bayanCollections[index].name,
                             url: bayanCollections[index].url,
+                            voice: bayanCollections[index].naatKhawan,
                           ),
                         ),
                       );
