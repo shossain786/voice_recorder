@@ -34,10 +34,14 @@ class _VideoListState extends State<VideoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Video List Demo'),
+        title: const Text('YouTube Videos'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          top: 10,
+        ),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -57,10 +61,11 @@ class _VideoListState extends State<VideoList> {
                   RemainingDuration(),
                   FullScreenButton(),
                 ],
+                aspectRatio: 16 / 9,
               );
             },
             itemCount: _controllers.length,
-            separatorBuilder: (context, _) => const SizedBox(height: 25.0),
+            separatorBuilder: (context, _) => const SizedBox(height: 55.0),
           ),
         ),
       ),
