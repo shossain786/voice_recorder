@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:io' as io;
 import 'package:flutter/material.dart';
-import 'package:file/local.dart';
-import 'package:another_audio_recorder/another_audio_recorder.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
 import 'widgets/buttom_nv_bar.dart';
 
@@ -32,27 +31,34 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class RecorderExample extends StatefulWidget {
-  final LocalFileSystem localFileSystem;
-
-  const RecorderExample({super.key, localFileSystem})
-      : localFileSystem = localFileSystem ?? const LocalFileSystem();
+  const RecorderExample({super.key});
 
   @override
   State<StatefulWidget> createState() => RecorderExampleState();
 }
 
 class RecorderExampleState extends State<RecorderExample> {
-  AnotherAudioRecorder? _recorder;
-  Recording? _current;
-  RecordingStatus _currentStatus = RecordingStatus.Unset;
-  AudioPlayer naatPlayer = AudioPlayer();
-  bool buttonPressed = false;
+  FlutterSoundRecorder? _recorder;
+  StreamSubscription? _recorderSubscription;
   bool _isRecording = false;
+  final List<double> _audioLevels = [];
+  String? _filePath;
+  Timer? _timer;
+  DateTime? _startTime;
+  Duration _duration = Duration.zero;
 
   @override
   void initState() {
     super.initState();
     _init();
+  }
+
+  @override
+  void dispose() {
+    _recorderSubscription?.cancel();
+    _recorder?.closeRecorder();
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -63,6 +69,13 @@ class RecorderExampleState extends State<RecorderExample> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+            Text(
+              _formatDuration(_duration),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -70,42 +83,25 @@ class RecorderExampleState extends State<RecorderExample> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      switch (_currentStatus) {
-                        case RecordingStatus.Initialized:
-                          {
-                            _start();
-                            break;
-                          }
-                        case RecordingStatus.Recording:
-                          {
-                            _pause();
-                            break;
-                          }
-                        case RecordingStatus.Paused:
-                          {
-                            _resume();
-                            break;
-                          }
-                        case RecordingStatus.Stopped:
-                          {
-                            _init();
-                            break;
-                          }
-                        default:
-                          break;
+                      if (_isRecording) {
+                        _pause();
+                      } else if (_recorder!.isPaused) {
+                        _resume();
+                      } else {
+                        _start();
                       }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
-                    child: _buildText(_currentStatus),
+                    child: _buildText(),
                   ),
                 ),
                 Visibility(
-                  visible: _isRecording,
+                  visible: _isRecording ||
+                      (_recorder != null && _recorder!.isPaused),
                   child: ElevatedButton(
-                    onPressed:
-                        _currentStatus != RecordingStatus.Unset ? _stop : null,
+                    onPressed: _stop,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
@@ -127,107 +123,107 @@ class RecorderExampleState extends State<RecorderExample> {
     );
   }
 
-  _init() async {
+  Future<void> _init() async {
     try {
-      if (await AnotherAudioRecorder.hasPermissions) {
-        String currentTime =
-            DateFormat('dd_MM_yyyy_HH_mm_ss').format(DateTime.now());
-        debugPrint(currentTime);
-        String customPath = '/voice_recording_$currentTime';
-        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
-
-        customPath = appDocDirectory.path + customPath;
-        _recorder =
-            AnotherAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
-
-        await _recorder?.initialized;
-        var current = await _recorder?.current(channel: 0);
-        debugPrint('$current');
-        setState(() {
-          _current = current;
-          _currentStatus = current!.status!;
-          debugPrint('$_currentStatus');
+      _recorder = FlutterSoundRecorder();
+      await _recorder!.openRecorder();
+      if (await _recorder!.isEncoderSupported(Codec.pcm16WAV)) {
+        _recorderSubscription = _recorder!.onProgress!.listen((event) {
+          double normalizedLevel = (event.decibels ?? 0) / 120;
+          if (_audioLevels.length >= 100) {
+            _audioLevels.removeAt(0);
+          }
+          _audioLevels.add(normalizedLevel);
+          debugPrint('Audio Levels: $_audioLevels'); // Debugging print
+          setState(() {});
         });
       } else {
-        return const SnackBar(content: Text("You must accept permissions"));
+        throw Exception("PCM format is not supported on this device");
       }
     } catch (e) {
       debugPrint('$e');
     }
   }
 
-  _start() async {
+  Future<void> _start() async {
     try {
-      await _recorder?.start();
-      var recording = await _recorder?.current(channel: 0);
-      setState(() {
-        _current = recording;
-        _isRecording = true;
+      io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      String currentTime =
+          DateFormat('dd_MM_yyyy_HH_mm_ss').format(DateTime.now());
+      _filePath = '${appDocDirectory.path}/voice_recording_$currentTime.wav';
+
+      await _recorder!.startRecorder(
+        toFile: _filePath,
+        codec: Codec.pcm16WAV,
+      );
+
+      _startTime = DateTime.now();
+      _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+        setState(() {
+          _duration = DateTime.now().difference(_startTime!);
+          debugPrint('Duration: $_duration'); // Debugging print
+        });
       });
 
-      const tick = Duration(milliseconds: 50);
-      Timer.periodic(tick, (Timer t) async {
-        if (_currentStatus == RecordingStatus.Stopped) {
-          t.cancel();
-        }
-
-        var current = await _recorder?.current(channel: 0);
-        // print(current.status);
-        setState(() {
-          _current = current;
-          _currentStatus = _current!.status!;
-        });
+      setState(() {
+        _isRecording = true;
       });
     } catch (e) {
       debugPrint('$e');
     }
   }
 
-  _resume() async {
-    await _recorder?.resume();
-    setState(() {});
-  }
-
-  _pause() async {
-    await _recorder?.pause();
-    setState(() {});
-  }
-
-  _stop() async {
-    var result = await _recorder?.stop();
+  Future<void> _resume() async {
+    await _recorder!.resumeRecorder();
+    _startTime = DateTime.now().subtract(_duration);
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {
+        _duration = DateTime.now().difference(_startTime!);
+        debugPrint('Duration: $_duration'); // Debugging print
+      });
+    });
     setState(() {
-      _current = result;
-      _isRecording = false;
-      _currentStatus = _current!.status!;
+      _isRecording = true;
     });
   }
 
-  Widget _buildText(RecordingStatus status) {
-    var text = "";
-    switch (_currentStatus) {
-      case RecordingStatus.Initialized:
-        {
-          text = 'Start';
-          break;
-        }
-      case RecordingStatus.Recording:
-        {
-          text = 'Pause';
-          break;
-        }
-      case RecordingStatus.Paused:
-        {
-          text = 'Resume';
-          break;
-        }
-      case RecordingStatus.Stopped:
-        {
-          text = 'Init';
-          break;
-        }
-      default:
-        break;
-    }
+  Future<void> _pause() async {
+    await _recorder!.pauseRecorder();
+    _timer?.cancel();
+    setState(() {
+      _isRecording = false;
+    });
+  }
+
+  Future<void> _stop() async {
+    await _recorder!.stopRecorder();
+    _recorderSubscription?.cancel();
+    _timer?.cancel();
+    setState(() {
+      _isRecording = false;
+      _audioLevels.clear();
+      _duration = Duration.zero;
+    });
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String threeDigits(int n) => n.toString().padLeft(3, '0');
+
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    final milliseconds =
+        threeDigits((duration.inMilliseconds % 1000)); // Corrected calculation
+    return '$hours:$minutes:$seconds:$milliseconds';
+  }
+
+  Widget _buildText() {
+    String text = _isRecording
+        ? 'Pause'
+        : (_recorder != null && _recorder!.isPaused)
+            ? 'Resume'
+            : 'Start';
     return Text(
       text,
       style: const TextStyle(
@@ -239,8 +235,9 @@ class RecorderExampleState extends State<RecorderExample> {
   }
 
   void onPlayAudio() async {
-    AudioPlayer audioPlayer = AudioPlayer();
-    Source source = DeviceFileSource(_current!.path!);
-    await audioPlayer.play(source);
+    if (_filePath != null) {
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(DeviceFileSource(_filePath!));
+    }
   }
 }
