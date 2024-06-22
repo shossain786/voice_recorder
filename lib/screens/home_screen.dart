@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
@@ -105,12 +106,14 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
 
   Future<void> saveRecording() async {
     if (currentFilePath != null) {
-      TextEditingController textController = TextEditingController();
+      TextEditingController textController = TextEditingController(
+        text: 'Rec_${DateFormat('yyyy-MM-dd_hh-mm-ss').format(DateTime.now())}',
+      );
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Save Recording'),
-          content: TextField(
+          content: TextFormField(
             controller: textController,
             decoration: const InputDecoration(hintText: 'Enter recording name'),
           ),
@@ -176,7 +179,7 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
 
   Future<void> shareRecording(String filePath) async {
     await Share.shareXFiles([XFile(filePath)], text: 'Check out my recording!');
-    showSuccessMessage(context, '***Reording shared successfully***');
+    // showSuccessMessage(context, '***Reording shared successfully***');
   }
 
   Future<void> downloadRecording(String filePath) async {
@@ -190,12 +193,14 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
   }
 
   Future<void> editRecording(String filePath) async {
-    TextEditingController textController = TextEditingController();
+    TextEditingController textController = TextEditingController(
+      text: filePath.split('/').last.split('.').first,
+    );
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Edit Recording Name'),
-        content: TextField(
+        title: const Text('Edit Name'),
+        content: TextFormField(
           controller: textController,
           decoration: const InputDecoration(hintText: 'Enter new name'),
         ),
@@ -222,7 +227,6 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
         ],
       ),
     );
-    showSuccessMessage(context, '***Recording Name Updated Successfully***');
   }
 
   @override
