@@ -26,19 +26,16 @@ class _PlayScreenState extends State<PlayScreen> {
     player = AudioPlayer();
     playRecording(widget.filePath);
 
-    // Add listener for when the audio completes
     player.onPlayerComplete.listen((_) {
       resetController();
     });
 
-    // Add listener for position updates
     player.onPositionChanged.listen((position) {
       setState(() {
         currentPosition = position;
       });
     });
 
-    // Add listener for duration updates
     player.onDurationChanged.listen((duration) {
       setState(() {
         totalDuration = duration;
