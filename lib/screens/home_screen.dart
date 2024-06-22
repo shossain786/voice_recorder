@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:voice_recorder/widgets/buttom_nv_bar.dart';
 import 'dart:async';
 import 'dart:io';
@@ -171,6 +172,57 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
     } on Exception catch (error) {
       debugPrint('Exception found: $error');
     }
+  }
+
+  Future<void> shareRecording(String filePath) async {
+    await Share.shareXFiles([XFile(filePath)], text: 'Check out my recording!');
+    showSuccessMessage(context, '***Reording shared successfully***');
+  }
+
+  Future<void> downloadRecording(String filePath) async {
+    Directory? externalDir = await getExternalStorageDirectory();
+    if (externalDir != null) {
+      String newPath = '${externalDir.path}/${filePath.split('/').last}';
+      File file = File(filePath);
+      await file.copy(newPath);
+      showSuccessMessage(context, 'Recording downloaded to $newPath');
+    }
+  }
+
+  Future<void> editRecording(String filePath) async {
+    TextEditingController textController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Recording Name'),
+        content: TextField(
+          controller: textController,
+          decoration: const InputDecoration(hintText: 'Enter new name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              String newName = textController.text;
+              if (newName.isNotEmpty) {
+                String newFilePath = '$directoryPath/$newName.aac';
+                File file = File(filePath);
+                await file.rename(newFilePath);
+                await loadRecordings();
+              }
+              Navigator.of(context).pop();
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    showSuccessMessage(context, '***Recording Name Updated Successfully***');
   }
 
   @override
@@ -390,16 +442,13 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                             if (value != null) {
                               switch (value) {
                                 case 'edit':
-                                  showSuccessMessage(
-                                      context, 'Pressed on Edit Option');
+                                  editRecording(filePath);
                                   break;
                                 case 'share':
-                                  showSuccessMessage(
-                                      context, 'Pressed on Share Option');
+                                  shareRecording(filePath);
                                   break;
                                 case 'download':
-                                  showSuccessMessage(
-                                      context, 'Pressed on Donwload Option');
+                                  downloadRecording(filePath);
                                   break;
                                 case 'delete':
                                   deleteRecordings(filePath);
