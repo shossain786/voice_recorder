@@ -39,7 +39,7 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
     getDirectoryPath();
     _animationStyle = AnimationStyle(
       curve: Easing.emphasizedDecelerate,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
     );
   }
 
@@ -115,6 +115,12 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
           ),
           actions: [
             TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
               onPressed: () async {
                 String newName = textController.text;
                 if (newName.isNotEmpty) {
@@ -129,12 +135,6 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                 Navigator.of(context).pop();
               },
               child: const Text('Save'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
             ),
           ],
         ),
@@ -265,8 +265,7 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                 itemCount: recordings.length,
                 itemBuilder: (context, index) {
                   String filePath = recordings[index];
-                  GlobalKey iconKey = GlobalKey(); // Add this line
-
+                  GlobalKey iconKey = GlobalKey();
                   return Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
