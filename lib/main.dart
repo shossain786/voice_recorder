@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voice_recorder/screens/bayans.dart';
-import 'package:voice_recorder/screens/recordings_screen.dart';
 
-import 'screens/recording_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/youtube_videos.dart';
 import 'screens/naat_collections.dart';
 
@@ -64,7 +63,6 @@ class MyApp extends StatelessWidget {
       home: const VoiceRecorderApp(),
       routes: {
         '/homePage': (context) => const VoiceRecorderApp(),
-        '/recordings': (context) => const RecordingsScreen(),
         '/naatPage': (context) => NaatCollections(),
         '/bayan': (context) => BayansScreen(),
         '/youtube': (context) => const VideoList(),

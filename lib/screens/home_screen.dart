@@ -1,6 +1,5 @@
-// ignore_for_file: must_be_immutable, library_private_types_in_public_api
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, use_build_context_synchronously
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,6 +9,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:voice_recorder/widgets/my_scaffold_msg.dart';
+
+import '../widgets/project_constants.dart';
+import 'record_play_screen.dart';
 
 class VoiceRecorderApp extends StatefulWidget {
   const VoiceRecorderApp({super.key});
@@ -283,7 +285,7 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                       textColor: const Color.fromARGB(255, 1, 41, 74),
                       leading: const Icon(Icons.music_note),
                       trailing: IconButton(
-                        key: iconKey, // Add this line
+                        key: iconKey,
                         icon: const Icon(Icons.more_vert_outlined),
                         onPressed: () async {
                           final RenderBox button = iconKey.currentContext!
@@ -306,8 +308,28 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                             context: context,
                             position: position,
                             popUpAnimationStyle: _animationStyle,
+                            color: popupColor,
                             items: [
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.edit,
+                                      color: popUptextColor,
+                                    ),
+                                    Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                        color: popUptextColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<String>(
                                 value: 'share',
                                 child: Row(
                                   mainAxisAlignment:
@@ -315,47 +337,51 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                                   children: [
                                     Icon(
                                       Icons.share,
-                                      color: Color.fromARGB(255, 1, 59, 106),
+                                      color: popUptextColor,
                                     ),
                                     Text(
                                       'Share',
                                       style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 1, 59, 106)),
+                                        color: popUptextColor,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'download',
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Icon(Icons.download,
-                                        color: Color.fromARGB(255, 1, 59, 106)),
+                                    Icon(
+                                      Icons.download,
+                                      color: popUptextColor,
+                                    ),
                                     Text(
                                       'Download',
                                       style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 1, 59, 106)),
+                                        color: popUptextColor,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'delete',
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Icon(Icons.delete,
-                                        color: Color.fromARGB(255, 1, 59, 106)),
+                                    Icon(
+                                      Icons.delete,
+                                      color: redColor,
+                                    ),
                                     Text(
                                       'Delete',
                                       style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 1, 59, 106)),
+                                        color: popUptextColor,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -364,13 +390,17 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                           ).then((value) {
                             if (value != null) {
                               switch (value) {
+                                case 'edit':
+                                  showSuccessMessage(
+                                      context, 'Pressed on Edit Option');
+                                  break;
                                 case 'share':
                                   showSuccessMessage(
-                                      context, 'Pressed on Share');
+                                      context, 'Pressed on Share Option');
                                   break;
                                 case 'download':
                                   showSuccessMessage(
-                                      context, 'Pressed on Donwload');
+                                      context, 'Pressed on Donwload Option');
                                   break;
                                 case 'delete':
                                   deleteRecordings(filePath);
@@ -384,7 +414,7 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
                       ),
                       shape: RoundedRectangleBorder(
                         side: const BorderSide(color: Colors.black, width: 1),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   );
@@ -392,120 +422,6 @@ class _VoiceRecorderAppState extends State<VoiceRecorderApp> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class PlayScreen extends StatefulWidget {
-  String filePath;
-  PlayScreen({super.key, required this.filePath});
-
-  @override
-  State<PlayScreen> createState() => _PlayScreenState();
-}
-
-class _PlayScreenState extends State<PlayScreen> {
-  late PlayerController playController;
-  bool _isPlaying = true;
-  late AudioPlayer player;
-
-  @override
-  void initState() {
-    playController = PlayerController();
-    player = AudioPlayer();
-    playRecording(widget.filePath);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    playController.dispose();
-    player.dispose();
-    super.dispose();
-  }
-
-  void playRecording(String path) {
-    player.play(DeviceFileSource(path));
-  }
-
-  void pauseRecording() {
-    player.pause();
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
-  }
-
-  void resumeRecording() {
-    player.resume();
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.filePath.split('/').last),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(widget.filePath.split('/').last),
-              const SizedBox(height: 100),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _isPlaying ? pauseRecording() : resumeRecording();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      minimumSize: const Size(70, 70),
-                      backgroundColor: Colors.red,
-                    ),
-                    child: _isPlaying
-                        ? const Icon(
-                            Icons.pause,
-                            size: 50,
-                            color: Colors.white,
-                          )
-                        : const Icon(
-                            Icons.play_arrow,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                  ),
-                  const SizedBox(height: 10),
-                  _isPlaying
-                      ? ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPlaying = !_isPlaying;
-                              Navigator.pop(context);
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            minimumSize: const Size(70, 70),
-                            backgroundColor: Colors.red,
-                          ),
-                          child: const Icon(
-                            Icons.stop,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text(''),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );

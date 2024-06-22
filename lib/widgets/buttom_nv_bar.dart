@@ -60,9 +60,6 @@ class _MyBottomNavBarState extends State<MyBottomNavBar> {
       case 0:
         Navigator.pushReplacementNamed(context, '/homePage');
         break;
-      // case 1:
-      //   Navigator.pushNamed(context, '/recordings');
-      //   break;
       case 1:
         Navigator.pushNamed(context, '/youtube');
         break;
