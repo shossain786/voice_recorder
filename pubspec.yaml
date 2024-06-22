@@ -24,6 +24,7 @@ dependencies:
   flutter_sound: ^9.2.13
   audio_waveforms: ^1.0.5
   share_plus: ^9.0.0
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
