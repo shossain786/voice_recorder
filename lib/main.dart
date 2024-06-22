@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:voice_recorder/home_screen.dart';
 import 'package:voice_recorder/screens/bayans.dart';
 import 'package:voice_recorder/screens/recordings_screen.dart';
 
+import 'screens/recording_screen.dart';
 import 'screens/youtube_videos.dart';
 import 'screens/naat_collections.dart';
 
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kColorScheme.onSecondary,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) => kColorScheme.primaryContainer,
+            backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+              (Set<WidgetState> states) => kColorScheme.primaryContainer,
             ),
           ),
         ),
@@ -61,9 +61,9 @@ class MyApp extends StatelessWidget {
           surfaceTintColor: Colors.blue,
         ),
       ),
-      home: const HomeScreen(),
+      home: const VoiceRecorderApp(),
       routes: {
-        '/homePage': (context) => const HomeScreen(),
+        '/homePage': (context) => const VoiceRecorderApp(),
         '/recordings': (context) => const RecordingsScreen(),
         '/naatPage': (context) => NaatCollections(),
         '/bayan': (context) => BayansScreen(),
